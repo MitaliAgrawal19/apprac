@@ -1,0 +1,56 @@
+#include<LPC214x.h>
+
+unsigned char Rx_byte;
+void init_UART0(void)
+{
+	PINSEL0 |=0x00000005;
+	U0LCR=0X83;
+	
+	U0DLM=0X00;
+	U0DLL=0X62;
+	
+	U0LCR=0X03;
+}
+
+void UART0_byte_Tx(unsigned char Tx_data)
+{
+	while((U0LSR & 0X60)==0X00);
+	U0THR=Tx_data;
+}
+
+unsigned char UART0_Rx_byte(void)
+{
+	while((U0LSR & 0X01)==0X00);
+		return U0RBR;
+}
+
+int main(void)
+{
+	init_UART0();
+	
+//	UART0_byte_Tx('v');
+//	UART0_byte_Tx('a');
+//	UART0_byte_Tx('i');
+//	UART0_byte_Tx('s');
+//	UART0_byte_Tx('h');
+//	UART0_byte_Tx('n');
+//	UART0_byte_Tx('a');
+//	UART0_byte_Tx('v');
+//	UART0_byte_Tx('i');
+//	while(1);
+//	
+//	unsigned char name[9]={"Vaishnavi"};
+//	unsigned int i;
+//	for(i=0;i<9;i++)
+//	{
+//		UART0_byte_Tx(name[i]);
+//	}
+//while(1)
+	{
+	Rx_byte=UART0_Rx_byte();
+	UART0_byte_Tx(Rx_byte);
+	}
+	
+	
+
+}
