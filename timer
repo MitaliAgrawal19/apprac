@@ -1,0 +1,69 @@
+//Flashing of LEDs using timer old kit
+#include<lpc214x.h>
+
+void ms_delay(unsigned int milliseconds){
+T0PR = 15000; //15000 clock cycles = 1 milli second
+T0TC = 0;
+T0TCR = 0x01;//Enable Timer
+
+while(T0TC<milliseconds); //Wait until timer counter reaches the desired delay
+T0TCR = 0x00; // Disable timer
+}
+
+
+
+
+int main(){
+//PINSEL1  = 0x00000000;
+IODIR0 = 0x000FF000;
+while (1){
+IOSET0 = 0x000FF000;
+ms_delay (1000);
+IOCLR0 = 0x000FF000;
+ms_delay(1000);
+}
+}
+
+####################newkit code
+
+void delay(unsigned int Total_Time)
+{
+	T0PR=15000;
+	T0TC=0;
+	T0TCR=0X01;
+	while(T0TC<Total_Time);
+	T0TCR=0X00;
+	T0TCR=0x02;
+}
+
+int main(void)
+{
+	//STEP1: SET LINES AS GPIO
+	PINSEL0 = 0x00000000; //P0.0 TP P0.15 AS GPIO
+	PINSEL1 = 0x00000000; //P0.16 TP P0.31 AS GPIO
+	PINSEL2 = 0x00000000;
+	//Init_Timer();
+	//STEP2:SET DIRECTION
+	IO1DIR =0XFF000000; //P0.15-P0.22 SET AS OUTPUT
+	
+	//STEP3:
+
+
+	while (1)
+	{
+		unsigned int i,j;
+		i=0X55000000;
+		j=0XAA000000;
+		IO1SET =i; 
+		delay(100);
+		IO1CLR =i;
+		delay(100);
+		IO1SET =j; 
+		delay(100);
+		IO1CLR =j;
+		delay(100);
+		}	
+}
+
+
+
